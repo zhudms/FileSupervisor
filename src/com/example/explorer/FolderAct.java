@@ -6,6 +6,7 @@ import java.util.Iterator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,9 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FolderAct extends Activity {
-
+	private String FILE_NAME="name";
 	private File mFile;
-	private MyReader mReader;
 	private MyAdapter mAdapter;
 	private ListView mListView;
 	private String path;// 当前路径的绝对路径
@@ -39,6 +39,8 @@ public class FolderAct extends Activity {
 	private ActionMode mActionMode;
 	private int numb;
 	private ActionModeCallback mActionModeCallback;
+	private SharedPreferences mPreferences;
+	private SharedPreferences.Editor mEditor;
 
 	// private final DataSetObservable mDataSetObservable = new
 	// DataSetObservable();
@@ -47,6 +49,8 @@ public class FolderAct extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		mPreferences = this.getSharedPreferences("FastViews", MODE_PRIVATE);
+		mEditor = mPreferences.edit();
 		back = false;
 		flag = true;
 		setContentView(R.layout.folder);
@@ -71,7 +75,7 @@ public class FolderAct extends Activity {
 
 				// if (FolderAct.flag) {//此处设置控制没意义
 				mAdapter.setFlag(true);
-
+				mActionMode = startActionMode(mActionModeCallback);
 				// FolderAct.flag = false;
 				/*
 				 * mAdapter.getItem(arg2).setSelected();
@@ -97,13 +101,13 @@ public class FolderAct extends Activity {
 
 					if (mAdapter.getItem(arg2).getSelected()) {
 
-						mActionMode = startActionMode(mActionModeCallback);
-						// setActionBarTitle();
 						
+						// setActionBarTitle();
+
 						arg1.setBackgroundResource(R.drawable.l);
 						mFastLists.add(mAdapter.getItem(arg2));
 						numb = mFastLists.size();
-//						mActionMode.setTitle(numb + "");
+						// mActionMode.setTitle(numb + "");
 						setActionBarTitle();
 						mAdapter.getItem(arg2).setPosion(arg2);
 					} else {
@@ -119,8 +123,8 @@ public class FolderAct extends Activity {
 								numb = mFastLists.size();
 
 								setActionBarTitle();
-								mActionMode = startActionMode(new ActionModeCallback(
-										FolderAct.this));
+//								mActionMode = startActionMode(new ActionModeCallback(
+//										FolderAct.this));
 								setActionBarTitle();
 								arg1.setBackgroundResource(R.drawable.b);
 
@@ -231,7 +235,8 @@ public class FolderAct extends Activity {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
 			switch (item.getItemId()) {
-
+			
+		
 			case R.id.action_delete:
 
 				getItemNoml();
@@ -246,10 +251,19 @@ public class FolderAct extends Activity {
 				Toast.makeText(FolderAct.this, "add ok!", Toast.LENGTH_SHORT)
 						.show();
 				mActionMode.finish();
+				addAllFastViews();
 				break;
 
 			}
 			return false;
+		}
+
+		private void addAllFastViews() {
+			// TODO Auto-generated method stub
+			for(ItemMessages i:mFastLists){
+				mEditor.putString(FILE_NAME+i.getName(), i.getAbusPath().toString());
+			}
+			mEditor.commit();
 		}
 
 		private void getItemNoml() {
