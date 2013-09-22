@@ -103,7 +103,8 @@ public class FolderAct extends Activity {
 						arg1.setBackgroundResource(R.drawable.l);
 						mFastLists.add(mAdapter.getItem(arg2));
 						numb = mFastLists.size();
-						mActionMode.setTitle(numb + "");
+//						mActionMode.setTitle(numb + "");
+						setActionBarTitle();
 						mAdapter.getItem(arg2).setPosion(arg2);
 					} else {
 						// 在本地文件中删除
@@ -117,7 +118,7 @@ public class FolderAct extends Activity {
 								iter.remove();
 								numb = mFastLists.size();
 
-								mActionMode.setTitle(numb + "");
+								setActionBarTitle();
 								mActionMode = startActionMode(new ActionModeCallback(
 										FolderAct.this));
 								setActionBarTitle();
@@ -201,7 +202,7 @@ public class FolderAct extends Activity {
 	 */
 	private void setActionBarTitle() {
 
-		mActionMode.setTitle(numb + "");
+		mActionMode.setTitle(this.numb + "");
 
 	}
 
