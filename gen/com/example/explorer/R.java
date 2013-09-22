@@ -226,37 +226,41 @@ containing a value of this type.
     public static final class drawable {
         public static final int abs__progress_secondary_holo_dark=0x7f020000;
         public static final int abs__tab_unselected_pressed_holo=0x7f020001;
-        public static final int btn_check_off_holo_light=0x7f020002;
-        public static final int btn_check_on_holo_light=0x7f020003;
-        public static final int btn_shortcut_del=0x7f020004;
-        public static final int folder=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int main_bg=0x7f020007;
-        public static final int pic_0=0x7f020008;
-        public static final int pic_1=0x7f020009;
-        public static final int pic_2=0x7f02000a;
-        public static final int pic_3=0x7f02000b;
-        public static final int pic_4=0x7f02000c;
-        public static final int pic_5=0x7f02000d;
-        public static final int pic_6=0x7f02000e;
-        public static final int shortcut_downloads=0x7f02000f;
-        public static final int shortcut_folder=0x7f020010;
-        public static final int shortcut_pictures=0x7f020011;
-        public static final int shortcut_platform=0x7f020012;
-        public static final int shortcutsd=0x7f020013;
-        public static final int tool=0x7f020014;
-        public static final int tool_about=0x7f020015;
-        public static final int tool_clean=0x7f020016;
-        public static final int tool_set=0x7f020017;
-        public static final int view=0x7f020018;
+        public static final int b=0x7f020002;
+        public static final int btn_check_off_holo_light=0x7f020003;
+        public static final int btn_check_on_holo_light=0x7f020004;
+        public static final int btn_shortcut_del=0x7f020005;
+        public static final int folder=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int l=0x7f020008;
+        public static final int large=0x7f020009;
+        public static final int main_bg=0x7f02000a;
+        public static final int pic_0=0x7f02000b;
+        public static final int pic_1=0x7f02000c;
+        public static final int pic_2=0x7f02000d;
+        public static final int pic_3=0x7f02000e;
+        public static final int pic_4=0x7f02000f;
+        public static final int pic_5=0x7f020010;
+        public static final int pic_6=0x7f020011;
+        public static final int shortcut_downloads=0x7f020012;
+        public static final int shortcut_folder=0x7f020013;
+        public static final int shortcut_pictures=0x7f020014;
+        public static final int shortcut_platform=0x7f020015;
+        public static final int shortcutsd=0x7f020016;
+        public static final int tool=0x7f020017;
+        public static final int tool_about=0x7f020018;
+        public static final int tool_clean=0x7f020019;
+        public static final int tool_set=0x7f02001a;
+        public static final int view=0x7f02001b;
+        public static final int wenjian=0x7f02001c;
     }
     public static final class id {
         public static final int BottomLayout=0x7f04001c;
-        public static final int ViewLayout=0x7f040026;
+        public static final int ViewLayout=0x7f040027;
         public static final int WeightDown=0x7f04001a;
         public static final int WeightPic=0x7f040019;
         public static final int WeightSd=0x7f040018;
-        public static final int action_settings=0x7f04002a;
+        public static final int action_settings=0x7f04002b;
         public static final int alignBounds=0x7f040002;
         public static final int alignMargins=0x7f040003;
         public static final int bottom=0x7f040005;
@@ -278,17 +282,18 @@ containing a value of this type.
         public static final int imageTool=0x7f04001d;
         public static final int imageView1=0x7f04001b;
         public static final int imageViewFolder=0x7f040021;
-        public static final int imageViewSelect=0x7f040025;
+        public static final int imageViewSelect=0x7f040026;
         public static final int imageViewdel=0x7f040022;
         public static final int last=0x7f040016;
         public static final int left=0x7f040006;
         public static final int listView1=0x7f040024;
+        public static final int no=0x7f040025;
         public static final int relateLayout=0x7f040020;
         public static final int right=0x7f040007;
         public static final int start=0x7f040010;
-        public static final int textName=0x7f040027;
-        public static final int textNumb=0x7f040028;
-        public static final int textTime=0x7f040029;
+        public static final int textName=0x7f040028;
+        public static final int textNumb=0x7f040029;
+        public static final int textTime=0x7f04002a;
         public static final int textView1=0x7f040012;
         public static final int textView2=0x7f040013;
         public static final int textViewName=0x7f040023;
@@ -300,8 +305,9 @@ containing a value of this type.
         public static final int activity_main=0x7f030001;
         public static final int floderbut_layout=0x7f030002;
         public static final int folder=0x7f030003;
-        public static final int set=0x7f030004;
-        public static final int views=0x7f030005;
+        public static final int nochild=0x7f030004;
+        public static final int set=0x7f030005;
+        public static final int views=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -315,11 +321,13 @@ containing a value of this type.
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
         
 
         Base application theme for API 11+. This theme completely replaces
@@ -338,6 +346,8 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int MyActionBarStyle=0x7f070003;
+        public static final int Mytheme=0x7f070002;
     }
     public static final class styleable {
         /** Attributes that can be used with a GridLayout.

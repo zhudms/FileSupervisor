@@ -6,23 +6,17 @@
     android:scrollbars="horizontal" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/abs__tab_unselected_pressed_holo"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ListView
-        android:id="@+id/listView1"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#28FF28"
-        android:dividerHeight="1dp"
-        android:fastScrollEnabled="true"
-        android:listSelector="@drawable/view"
-        android:scrollbarSize="50dp"
-        android:scrollbars="horizontal" >
-    </ListView>
+        android:src="@drawable/large"
+        android:id="@+id/no" />
 
 </LinearLayout>

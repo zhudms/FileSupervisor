@@ -23,6 +23,6 @@
 
     <!-- 默认时的背景图片 -->
 
-    <item android:drawable="@drawable/pic_0"/>
+    <item android:drawable="@drawable/b"/>
 
 </selector>
