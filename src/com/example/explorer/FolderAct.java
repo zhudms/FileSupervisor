@@ -2,8 +2,9 @@ package com.example.explorer;
 
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.Iterator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,9 +34,11 @@ public class FolderAct extends Activity {
 	private static Boolean flag;
 	private ArrayList<ItemMessages> mItemLists;
 	private ArrayList<ItemMessages> mFastLists;
-	private ActionMode numb;
 	private ActionMode DelAndAdd;
 	private Boolean back;
+	private ActionMode mActionMode;
+	private int numb;
+	private ActionModeCallback mActionModeCallback;
 
 	// private final DataSetObservable mDataSetObservable = new
 	// DataSetObservable();
@@ -42,6 +46,7 @@ public class FolderAct extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		back = false;
 		flag = true;
 		setContentView(R.layout.folder);
@@ -56,6 +61,7 @@ public class FolderAct extends Activity {
 		mFastLists = new ArrayList<ItemMessages>();
 		mPathTextView.setText(path);// path是绝对路径
 		mListView.setAdapter(mAdapter);
+		mActionModeCallback = new ActionModeCallback(FolderAct.this);
 		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -65,12 +71,15 @@ public class FolderAct extends Activity {
 
 				// if (FolderAct.flag) {//此处设置控制没意义
 				mAdapter.setFlag(true);
+
 				// FolderAct.flag = false;
-				/*mAdapter.getItem(arg2).setSelected();
-				arg1.setBackgroundResource(R.drawable.l);
-				mAdapter.getItem(arg2).setSelected();
-				mFastLists.add(mAdapter.getItem(arg2));*///若此种长按默认有一个短按的动作那这些都可以省略了
-				// }
+				/*
+				 * mAdapter.getItem(arg2).setSelected();
+				 * arg1.setBackgroundResource(R.drawable.l);
+				 * mAdapter.getItem(arg2).setSelected();
+				 * mFastLists.add(mAdapter.getItem(arg2));
+				 */// 若此种长按默认有一个短按的动作那这些都可以省略了
+					// }
 				return false;
 			}
 		});
@@ -81,12 +90,43 @@ public class FolderAct extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-
+				Log.d("23", "1");
 				if (mAdapter.getFlag()) {
 
 					mAdapter.getItem(arg2).setSelected();
-					arg1.setBackgroundResource(R.drawable.l);
-					mFastLists.add(mAdapter.getItem(arg2));
+
+					if (mAdapter.getItem(arg2).getSelected()) {
+
+						mActionMode = startActionMode(mActionModeCallback);
+						// setActionBarTitle();
+						
+						arg1.setBackgroundResource(R.drawable.l);
+						mFastLists.add(mAdapter.getItem(arg2));
+						numb = mFastLists.size();
+						mActionMode.setTitle(numb + "");
+						mAdapter.getItem(arg2).setPosion(arg2);
+					} else {
+						// 在本地文件中删除
+
+						Iterator<ItemMessages> iter = mFastLists.iterator();
+						while (iter.hasNext()) {
+
+							ItemMessages m = iter.next();
+
+							if (m.equals(mAdapter.getItem(arg2))) {
+								iter.remove();
+								numb = mFastLists.size();
+
+								mActionMode.setTitle(numb + "");
+								mActionMode = startActionMode(new ActionModeCallback(
+										FolderAct.this));
+								setActionBarTitle();
+								arg1.setBackgroundResource(R.drawable.b);
+
+							}
+						}
+					}
+
 					// arg1.各种操作
 				} else {
 
@@ -154,4 +194,88 @@ public class FolderAct extends Activity {
 
 	}
 
+	/**
+	 * 设置ActionBar的标题显示
+	 * 
+	 * @author yanjun.wang
+	 */
+	private void setActionBarTitle() {
+
+		mActionMode.setTitle(numb + "");
+
+	}
+
+	public class ActionModeCallback implements ActionMode.Callback {
+		private Menu mMenu;
+		private Context mContext;
+
+		public ActionModeCallback(Context context) {
+			mContext = context;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = ((Activity) mContext).getMenuInflater();
+			mMenu = menu;
+			inflater.inflate(R.menu.operation_menu, mMenu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+			switch (item.getItemId()) {
+
+			case R.id.action_delete:
+
+				getItemNoml();
+				Toast.makeText(FolderAct.this, "delete ok!", Toast.LENGTH_SHORT)
+						.show();
+				mActionMode.finish();
+				break;
+
+			case R.id.action_add_shortcut:
+
+				getItemNoml();
+				Toast.makeText(FolderAct.this, "add ok!", Toast.LENGTH_SHORT)
+						.show();
+				mActionMode.finish();
+				break;
+
+			}
+			return false;
+		}
+
+		private void getItemNoml() {
+			// TODO Auto-generated method stub
+
+			Iterator<ItemMessages> m = mFastLists.iterator();
+
+			if (m != null) {
+				while (m.hasNext()) {
+					ItemMessages item = m.next();
+					item.setSelected();
+					mListView.getChildAt(item.getPosion())
+							.setBackgroundResource(R.drawable.b);
+				}
+			}
+
+			mAdapter.setFlag(false);
+			mFastLists.clear();
+
+			numb = mFastLists.size();
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			//
+
+		}
+
+	}
 }

@@ -5,6 +5,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.view.View;
+
 public class ItemMessages {
 
 	private File mFile;
@@ -15,9 +17,10 @@ public class ItemMessages {
 	private Boolean style;
 	private Boolean isHidden;
 	private Boolean selected;
+	private int position;
 
 	public ItemMessages(File file) {
-
+	
 		this.mFile = file;
 		this.name = file.getName();
 		this.Data = dateFormat.format(new Date(file.lastModified()));
@@ -71,4 +74,11 @@ public class ItemMessages {
 		return mFile;
 	}
 
+	public void setPosion(int posion) {
+		this.position = posion;
+	}
+
+	public int getPosion() {
+		return position;
+	}
 }
