@@ -239,7 +239,7 @@ public class FolderAct extends Activity {
 		
 			case R.id.action_delete:
 
-				getItemNoml();
+			//	getItemNoml();
 				Toast.makeText(FolderAct.this, "delete ok!", Toast.LENGTH_SHORT)
 						.show();
 				mActionMode.finish();
@@ -247,7 +247,7 @@ public class FolderAct extends Activity {
 
 			case R.id.action_add_shortcut:
 
-				getItemNoml();
+			//	getItemNoml();
 				Toast.makeText(FolderAct.this, "add ok!", Toast.LENGTH_SHORT)
 						.show();
 				mActionMode.finish();
@@ -289,7 +289,7 @@ public class FolderAct extends Activity {
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			//
-
+			getItemNoml();
 		}
 
 	}
