@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="ivory">#FFFFF0</color>
+    <color name="blue_center">#FFFFF0</color>
+    <color name="bule_margin">#84C1FF</color>
+    <color name="green_center">#93FF93</color>
+
+    <!-- 象牙色 -->
+    <color name="lightyellow">#FFFFE0</color>
+
+</resources>

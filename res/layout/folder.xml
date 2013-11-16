@@ -20,7 +20,6 @@
         android:divider="#28FF28"
         android:dividerHeight="1dp"
         android:fastScrollEnabled="true"
-        android:listSelector="@drawable/view"
         android:scrollbarSize="50dp"
         android:scrollbars="horizontal" >
     </ListView>

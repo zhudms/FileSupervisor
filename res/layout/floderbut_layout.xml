@@ -7,8 +7,8 @@
     <RelativeLayout
         android:id="@+id/relateLayout"
         android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:layout_marginRight="13dp"
+        android:layout_height="125dp"
+       
         android:longClickable="true"
         android:orientation="vertical"
         android:padding="15dp" >
@@ -29,7 +29,8 @@
 
         <TextView
             android:id="@+id/textViewName"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
+            android:layout_below="@id/imageViewFolder"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/imageViewFolder"
             android:layout_alignParentBottom="true"

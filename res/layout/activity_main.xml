@@ -13,24 +13,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <LinearLayout
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_weight="2"
-        android:orientation="vertical" >
-    </LinearLayout>
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/empty" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="150dp" -->
+    <!-- android:layout_weight="2" -->
+    <!-- android:orientation="vertical" > -->
+    <!-- </LinearLayout> -->
 
     <LinearLayout
         android:id="@+id/last"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
         android:layout_weight="2"
         android:orientation="vertical" >
 
         <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="270dp"
+            android:layout_height="370dp"
             android:fastScrollEnabled="true"
             android:scrollbars="horizontal" >
 
@@ -41,17 +42,25 @@
                 android:alignmentMode="alignMargins"
                 android:columnCount="3"
                 android:columnOrderPreserved="true"
-                android:padding="15dp"
-                android:rowCount="2" >
+                android:rowCount="3" >
 
-                <com.example.explorer.MyWeight android:id="@+id/WeightSd" >
-                </com.example.explorer.MyWeight>
+                <com.example.explorer.view.main.MyWeight
+                    android:id="@+id/WeightSd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+                </com.example.explorer.view.main.MyWeight>
 
-                <com.example.explorer.MyWeight android:id="@+id/WeightPic" >
-                </com.example.explorer.MyWeight>
+                <com.example.explorer.view.main.MyWeight
+                    android:id="@+id/WeightPic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+                </com.example.explorer.view.main.MyWeight>
 
-                <com.example.explorer.MyWeight android:id="@+id/WeightDown" >
-                </com.example.explorer.MyWeight>
+                <com.example.explorer.view.main.MyWeight
+                    android:id="@+id/WeightDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+                </com.example.explorer.view.main.MyWeight>
             </GridLayout>
         </ScrollView>
 
