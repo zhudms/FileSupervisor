@@ -5,30 +5,29 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.view.View;
-
 /**
  * 
-* @ClassName: ItemMessages 
-* @Description: 记录文件夹显示的内容
-* @author T
-* @date 2013-11-8 下午9:17:24 
-*
+ * @ClassName: ItemMessages
+ * @Description: 记录文件夹显示的内容
+ * @author T
+ * @date 2013-11-8 下午9:17:24
+ * 
  */
 public class ItemMessages {
 
-	private File mFile;
-	private String name;
-	private String Data;
-	private String SubMub;
+	private File mFile;// 绝对路径
+	private String name;// 文件夹名称
+	private String Data;// 最后修改日期
+	private String SubMub;// 子文件夹数
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	private Boolean style;
-	private Boolean isHidden;
-	private Boolean selected;
-	private int position;
+	private Boolean isHidden;// 是否是隐藏文件
+	private Boolean selected;// 是否被选中
+	private int position;//
+	private String kind;// 文件类型
+	private int imageId;
 
 	public ItemMessages(File file) {
-	
+
 		this.mFile = file;
 		this.name = file.getName();
 		this.Data = dateFormat.format(new Date(file.lastModified()));
@@ -68,6 +67,19 @@ public class ItemMessages {
 		} else {
 			return true;
 		}
+		
+		
+		/*String*/
+		
+		kind={};
+		switch (key) {
+		case value:
+			
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	public Boolean getHid() {
@@ -89,4 +101,5 @@ public class ItemMessages {
 	public int getPosion() {
 		return position;
 	}
+
 }

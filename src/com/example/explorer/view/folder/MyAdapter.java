@@ -110,37 +110,56 @@ public class MyAdapter extends BaseAdapter {
 			// _layout),from()指示是谁的实例化器,指示的是要加到哪,指活动的对象(调用此处的对象?),此处指最外层的Leaner
 			// -layout
 
+			mTextName = (TextView) convertView.findViewById(R.id.textName);// View中包含的部件才能被找到(否则报错,不是R中有就行)(此处指list_item中)
+			mTextNumb = (TextView) convertView.findViewById(R.id.textNumb);
+			mTextTime = (TextView) convertView.findViewById(R.id.textTime);
+			this.mImageView = (ImageView) convertView
+					.findViewById(R.id.imageView1);
+
+			MyHodle hodle = new MyHodle();
+			hodle.ImageView = this.mImageView;
+			hodle.TextName = this.mTextName;
+			hodle.TextTime = this.mTextTime;
+			hodle.TextNumb = this.mTextNumb;
+
+			convertView.setTag(hodle);
 		}
-		
+
+		MyHodle hodle = (MyHodle) convertView.getTag();
+
 		if (!mArrayList.get(position).getSelected()) {
 			Log.d("123", "notSelected");
-//			convertView.setBackgroundResource(R.drawable.normal_item);
+			// convertView.setBackgroundResource(R.drawable.normal_item);
 			convertView.setBackgroundColor(0xFFCAFFFF);
 		} else {
 			Log.d("123", "Selected");
-//			convertView.setBackgroundResource(R.drawable.selected_background);
+			// convertView.setBackgroundResource(R.drawable.selected_background);
 			convertView.setBackgroundColor(0xFFFFFFCE);
 		}
 
-		mTextName = (TextView) convertView.findViewById(R.id.textName);// View中包含的部件才能被找到(否则报错,不是R中有就行)(此处指list_item中)
-		mTextNumb = (TextView) convertView.findViewById(R.id.textNumb);
-		mTextTime = (TextView) convertView.findViewById(R.id.textTime);
-		mImageView = (ImageView) convertView.findViewById(R.id.imageView1);
-
-		mTextName.setText(mArrayList.get(position).getName());
-		mTextNumb.setText(mArrayList.get(position).getSubMub());
-		mTextTime.setText(mArrayList.get(position).getData());
+		hodle.TextName.setText(mArrayList.get(position).getName());
+		hodle.TextNumb.setText(mArrayList.get(position).getSubMub());
+		hodle.TextTime.setText(mArrayList.get(position).getData());
+		/*设置Item图标*/
 		if (!mArrayList.get(position).getStyle()) {
-			mImageView.setImageResource(R.drawable.wenjian);
+			hodle.ImageView.setImageResource(R.drawable.wenjian);
 		} else {
-			mImageView.setImageResource(R.drawable.folder);
+			hodle.ImageView.setImageResource(R.drawable.folder);
 		}
 		// convertView.setOnLongClickListener(this.longClickListener);
 		// convertView.setOnClickListener(this.clickListener);
 		// }
-		
-//		convertView.set
+
+		// convertView.set
 		return convertView;
 
+	}
+
+	class MyHodle {
+
+		TextView TextName;
+		TextView TextNumb;
+		TextView TextTime;
+		ImageView ImageView;
 	}
 }

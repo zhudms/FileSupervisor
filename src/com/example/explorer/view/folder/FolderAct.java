@@ -30,7 +30,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -179,41 +181,96 @@ public class FolderAct extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		MenuItem item0 = menu.getItem(0);
+		MenuItem item1 = menu.getItem(1);
+		item0.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				onCancle();
+				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				return false;
+			}
+		});
+
+		item1.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				onCancle();
+				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				return false;
+			}
+		});
 		if (Messages.fileToCopy.isEmpty()) {
-			MenuItem item = menu.getItem(2);
+
 			MenuItem item2 = menu.getItem(1);
 			MenuItem item3 = menu.getItem(0);
-			item.setVisible(false);
 			item2.setVisible(false);
 			item3.setVisible(false);
 		}
 		return true;
 	}
 
-	/*
-	 * 应该是在这选择粘贴及取消? (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	// /*
+	// * 应该是在这选择粘贴及取消? (non-Javadoc)
+	// *
+	// * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
+	// */
+	// @Override
+	// public boolean onContextItemSelected(MenuItem item) {
+	// // TODO Auto-generated method stub
+	// switch (item.getItemId()) {
+	// case 0:
+	// // item.setVisible(false);
+	// toPaste();
+	// getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+	// break;
+	//
+	// case 1:
+	// onCancle();
+	// getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+	// // item.setVisible(false);
+	// break;
+	// //
+	// // /*
+	// // * 粘贴
+	// // */
+	// // case R.id.action_paste:// 移动到menu.main中了
+	// // toPaste();
+	// // getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+	// // break;
+	// //
+	// // /*
+	// // * 取消
+	// // */
+	// // case R.id.action_cancle:// 移动到menu.main中了
+	// // onCancle();
+	// // getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+	// // break;
+	//
+	// default:
+	// break;
+	// }
+	// return super.onContextItemSelected(item);
+	// }
+
+	private void onCancle() {
 		// TODO Auto-generated method stub
-		switch (item.getItemId()) {
-		case 0:
-			item.setVisible(false);
-			break;
-
-		case 1:
-			item.setVisible(false);
-			break;
-		case 2:
-			item.setVisible(false);
-			break;
-
-		default:
-			break;
+		while (!Messages.fileToCopy.empty()) {
+			Messages.fileToCopy.pop();
 		}
-		return super.onContextItemSelected(item);
+
+	}
+
+	/*
+	 * 粘贴
+	 */
+	private void toPaste() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -327,6 +384,7 @@ public class FolderAct extends Activity {
 				builder.setTitle("确定删除吗?");
 				builder.show();
 				break;
+
 			/* 快捷方式 */
 			case R.id.action_add_shortcut:
 
@@ -351,20 +409,8 @@ public class FolderAct extends Activity {
 				mActionMode.finish();
 				break;
 
-			// case R.id.action_paste://移动到menu.main中了
-			// toPaste();
-			// break;
-			//
 			}
 			return false;
-		}
-
-		/*
-		 * 粘贴
-		 */
-		private void toPaste() {
-			// TODO Auto-generated method stub
-
 		}
 
 		/*
@@ -375,7 +421,7 @@ public class FolderAct extends Activity {
 			for (ItemMessages f : mFastLists) {
 				Messages.fileToCopy.push(f);
 			}
-
+			getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);// 更新menu显示
 		}
 
 		/*

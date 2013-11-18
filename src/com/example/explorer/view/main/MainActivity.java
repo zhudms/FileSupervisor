@@ -101,11 +101,11 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		MenuItem item = menu.getItem(0);
-		MenuItem item2 = menu.getItem(2);
-		MenuItem item3 = menu.getItem(1);
+		MenuItem item2 = menu.getItem(1);
+	
 		item.setVisible(false);
 		item2.setVisible(false);
-		item3.setVisible(false);
+	
 		return true;
 	}
 
