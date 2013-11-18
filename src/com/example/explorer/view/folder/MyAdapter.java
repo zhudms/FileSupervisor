@@ -3,14 +3,11 @@ package com.example.explorer.view.folder;
 import java.util.ArrayList;
 import com.example.explorer.R;
 import com.example.explorer.data.ItemMessages;
-import com.example.explorer.data.Messages;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -146,11 +143,8 @@ public class MyAdapter extends BaseAdapter {
 		} else {
 			hodle.ImageView.setImageResource(R.drawable.folder);
 		}
-		// convertView.setOnLongClickListener(this.longClickListener);
-		// convertView.setOnClickListener(this.clickListener);
-		// }
-
-		// convertView.set
+//		FileIconHelper.instance(mContext).setIcon(fileInfo, lFileImage,
+//				lFileImageFrame);
 		return convertView;
 
 	}

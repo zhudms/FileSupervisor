@@ -25,6 +25,8 @@ public class ItemMessages {
 	private int position;//
 	private String kind;// 文件类型
 	private int imageId;
+	public boolean canRead;
+	public boolean canWrite;
 
 	public ItemMessages(File file) {
 
@@ -32,6 +34,10 @@ public class ItemMessages {
 		this.name = file.getName();
 		this.Data = dateFormat.format(new Date(file.lastModified()));
 		this.selected = false;
+	}
+
+	public ItemMessages() {
+
 	}
 
 	public String getSubMub() {
@@ -67,19 +73,18 @@ public class ItemMessages {
 		} else {
 			return true;
 		}
-		
-		
-		/*String*/
-		
-		kind={};
-		switch (key) {
-		case value:
-			
-			break;
 
-		default:
-			break;
-		}
+		/* String */
+
+		// kind={};
+		// switch (key) {
+		// case value:
+		//
+		// break;
+		//
+		// default:
+		// break;
+		// }
 	}
 
 	public Boolean getHid() {
