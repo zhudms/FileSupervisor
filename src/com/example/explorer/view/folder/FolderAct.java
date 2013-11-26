@@ -1,49 +1,60 @@
 package com.example.explorer.view.folder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Stack;
 
-import com.example.explorer.R;
-import com.example.explorer.R.drawable;
-import com.example.explorer.R.id;
-import com.example.explorer.R.layout;
-import com.example.explorer.R.menu;
-import com.example.explorer.data.Item;
-import com.example.explorer.data.ItemMessages;
-import com.example.explorer.data.Messages;
-
+import android.app.ActionBar;
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.explorer.R;
+import com.example.explorer.data.ItemMessages;
+import com.example.explorer.data.Messages;
+import com.example.explorer.util.IntentBuilder;
+
 public class FolderAct extends Activity {
 	private String FILE_NAME = "name";
-	private File mFile;
+	public File mFile;
 	private MyAdapter mAdapter;
 	private ListView mListView;
 	private String path;// 当前路径的绝对路径
@@ -59,13 +70,55 @@ public class FolderAct extends Activity {
 	private SharedPreferences mPreferences;
 	private SharedPreferences.Editor mEditor;
 	private String Hidden;
+	private Handler handler = new Handler() {
 
-	// private final DataSetObservable mDataSetObservable = new
-	// DataSetObservable();
+		public void handleMessage(android.os.Message msg) {
+			// 1.
+			switch (msg.what) {
+			// 2.
+			// switch (msg.arg1) {
+			case 0:
+				Toast.makeText(FolderAct.this, "已包含此文件(夹)", 0).show();
+
+				mItemLists.clear();
+				getArrayList();
+				mAdapter.notifyDataSetChanged();
+				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				break;
+			case 1:
+				Toast.makeText(FolderAct.this, "创建文件失败", 0).show();
+
+				mItemLists.clear();
+				getArrayList();
+				mAdapter.notifyDataSetChanged();
+				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				break;
+			case 2:
+				mFastLists.clear();
+				mItemLists.clear();
+				getArrayList();
+				mAdapter.notifyDataSetChanged();
+				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				break;
+			case 3:
+				Toast.makeText(FolderAct.this, "文件夹不可复制", 0).show();
+				mFastLists.clear();
+				mItemLists.clear();
+				getArrayList();
+				mAdapter.notifyDataSetChanged();
+				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				break;
+			default:
+				break;
+			}
+
+		};
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		Hidden = Messages.getHid();
 		mPreferences = this.getSharedPreferences("FastViews", MODE_PRIVATE);
 		mEditor = mPreferences.edit();
@@ -93,17 +146,11 @@ public class FolderAct extends Activity {
 
 				if (FolderAct.flag) {// 此处设置控制没意义
 					mAdapter.setFlag(true);
+					mFastLists.clear();
 					mActionMode = startActionMode(mActionModeCallback);
 					flag = !flag;
 				}
-				// FolderAct.flag = false;
-				/*
-				 * mAdapter.getItem(arg2).setSelected();
-				 * arg1.setBackgroundResource(R.drawable.l);
-				 * mAdapter.getItem(arg2).setSelected();
-				 * mFastLists.add(mAdapter.getItem(arg2));
-				 */// 若此种长按默认有一个短按的动作那这些都可以省略了
-					// }
+
 				return false;
 			}
 		});
@@ -166,8 +213,11 @@ public class FolderAct extends Activity {
 						mAdapter.notifyDataSetChanged();
 					} else {
 
-						Toast.makeText(FolderAct.this, "can't open", 200)
-								.show();
+						// Toast.makeText(FolderAct.this, "can't open", 200)
+						// .show();
+						ItemMessages item2 = mAdapter.getItem(arg2);
+						mFile = item2.getAbusPath();
+						IntentBuilder.viewFile(FolderAct.this, mFile.getPath());
 
 					}
 
@@ -175,6 +225,22 @@ public class FolderAct extends Activity {
 			}
 		});
 
+		ImageView view = new ImageView(this);
+		view.setImageResource(R.drawable.ic_menu_new_folder);
+		LayoutParams layoutParams = new LayoutParams(55, 55);
+		layoutParams.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setCustomView(view, layoutParams);
+		view.setClickable(true);
+		view.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				addNewItem();
+			}
+		});
 	}
 
 	@Override
@@ -183,13 +249,44 @@ public class FolderAct extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		MenuItem item0 = menu.getItem(0);
 		MenuItem item1 = menu.getItem(1);
+
 		item0.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
-				onCancle();
-				getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+
+						int i = toPaste();
+						Message message = Message.obtain();
+						message.what = i;
+						handler.sendEmptyMessage(message.what);
+
+						// 1.
+						// handler.sendEmptyMessage(i);
+						// 2.
+						// handler.sendMessage(message);
+
+						// handler.post(new Runnable() {
+						//
+						// @Override
+						// public void run() {//执行HandMessage中的方法
+						// // TODO Auto-generated method stub
+						//
+						// }
+						// });
+
+						// Intent intent = FolderAct.this.getIntent();
+						// Intent intent = new Intent();
+						// intent.setAction("Action");
+						// FolderAct.this.sendBroadcast(intent);
+					}
+				}).start();
+
 				return false;
 			}
 		});
@@ -214,49 +311,9 @@ public class FolderAct extends Activity {
 		return true;
 	}
 
-	// /*
-	// * 应该是在这选择粘贴及取消? (non-Javadoc)
-	// *
-	// * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
-	// */
-	// @Override
-	// public boolean onContextItemSelected(MenuItem item) {
-	// // TODO Auto-generated method stub
-	// switch (item.getItemId()) {
-	// case 0:
-	// // item.setVisible(false);
-	// toPaste();
-	// getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
-	// break;
-	//
-	// case 1:
-	// onCancle();
-	// getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
-	// // item.setVisible(false);
-	// break;
-	// //
-	// // /*
-	// // * 粘贴
-	// // */
-	// // case R.id.action_paste:// 移动到menu.main中了
-	// // toPaste();
-	// // getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
-	// // break;
-	// //
-	// // /*
-	// // * 取消
-	// // */
-	// // case R.id.action_cancle:// 移动到menu.main中了
-	// // onCancle();
-	// // getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
-	// // break;
-	//
-	// default:
-	// break;
-	// }
-	// return super.onContextItemSelected(item);
-	// }
-
+	/*
+	 * 取消
+	 */
 	private void onCancle() {
 		// TODO Auto-generated method stub
 		while (!Messages.fileToCopy.empty()) {
@@ -268,15 +325,107 @@ public class FolderAct extends Activity {
 	/*
 	 * 粘贴
 	 */
-	private void toPaste() {
+	private int toPaste() {
 		// TODO Auto-generated method stub
 
+		int i = 0;
+		while (Messages.fileToCopy.size() != 0) {
+			boolean bo;
+			ItemMessages itemMessages = Messages.fileToCopy.pop();
+			File f = itemMessages.getAbusPath();
+
+			String str = mFile.getAbsolutePath();
+			String s = str + "/" + itemMessages.getName();
+			File file = new File(s);
+			Log.d("123", "file is exit=" + file.exists());
+			if (file.exists()) {
+				return 0;
+			} else {
+				try {
+					// 创建文件
+					if (f.isDirectory()) {
+						i++;
+						Log.d("123", "is IDtectory");
+						continue;
+						// bo = file.mkdir();
+						// 递归复制文件夹
+					} else {
+						bo = file.createNewFile();
+					}
+
+					// 判断文件是否创建成功
+					if (!bo) {
+						Messages.fileToCopy.push(itemMessages);
+						Toast.makeText(FolderAct.this, "创建文件失败", 0).show();
+						return 1;
+					}
+					// 写入
+					InputStream inputStream = new FileInputStream(f);
+					OutputStream outputStream = new FileOutputStream(file);
+					byte[] b = new byte[1024];
+					int len = 0;
+					while (true) {
+						len = inputStream.read(b);
+						if (len != -1) {
+							outputStream.write(b, 0, len);
+						} else {
+							break;
+						}
+					}
+					outputStream.flush();
+					outputStream.close();
+					inputStream.close();
+					//对缩略图map进行操作
+					f.delete();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					Log.d("123", "输入流建立失败");
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.d("123", "读入错误");
+					e.printStackTrace();
+				}
+
+			}
+
+		}
+		if (i > 0) {
+			return 3;
+		} else {
+			return 2;
+
+		}
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		return super.onKeyDown(keyCode, event);
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			Log.d("123", "outSrory" + Messages.outsideStorage.getAbsolutePath());
+			Log.d("123", "rorot" + Messages.rootMenu.getAbsolutePath());
+			// Log.d("123","sd"+Environment.get);
+			mFile = mFile.getParentFile();
+			/* 有父目录,或是点击进入的文件夹可以返回.....当返回到sd卡文件夹或点击进来的文件夹时终止 */
+			if ((mFile != null || mFile.equals(Messages.clickIn))
+					&& !mFile.equals(Messages.outsideStorage.getParentFile())
+					&& !mFile.equals(Messages.clickIn.getParentFile())) {
+				mPathTextView.setText(mFile.getAbsolutePath().toString());
+				mItemLists.clear();
+				getArrayList();
+				mAdapter.notifyDataSetChanged();
+			} else {
+				finish();
+			}
+
+			break;
+
+		default:
+			break;
+		}
+		return true;
+		// return super.onKeyDown(keyCode, event);
 	}
 
 	public ArrayList<ItemMessages> getArrayList() {
@@ -320,6 +469,68 @@ public class FolderAct extends Activity {
 
 		mActionMode.setTitle(this.numb + "个被选择");
 
+	}
+
+	/*
+	 * 新建
+	 */
+	public void addNewItem() {
+		// TODO Auto-generated method stub
+		final View v;
+		AlertDialog.Builder builder = new Builder(FolderAct.this);
+		v = LayoutInflater.from(this).inflate(R.layout.new_file, null);
+
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				EditText editText = (EditText) v.findViewById(R.id.editText1);
+				String s = editText.getText().toString();
+				s = FolderAct.this.mFile.getAbsolutePath() + "/" + s;
+				File file = new File(s);
+
+				if (!file.exists()) {
+					boolean b;
+					try {
+						if (s.contains(".")) {
+							b = file.createNewFile();
+						} else {
+							b = file.mkdirs();
+						}
+
+						if (b) {
+							Toast.makeText(FolderAct.this, "文件新建成功", 0).show();
+							ItemMessages itemMessages = new ItemMessages(file);
+							FolderAct.this.mItemLists.add(itemMessages);
+							FolderAct.this.mAdapter.notifyDataSetChanged();
+						} else {
+							Toast.makeText(FolderAct.this, "不可知错误", 0).show();
+						}
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Toast.makeText(FolderAct.this, "IOEXception", 0).show();
+						e.printStackTrace();
+					}
+				} else {
+					Toast.makeText(FolderAct.this, "文件已存在", 0).show();
+				}
+			}
+		});
+
+		builder.setView(v);
+		builder.setTitle("新建文件夹");
+		builder.show();
 	}
 
 	public class ActionModeCallback implements ActionMode.Callback {
@@ -399,13 +610,19 @@ public class FolderAct extends Activity {
 			/* 新建 */
 			case R.id.action_new:
 				addNewItem();
-
+				getItemNoml();
+				mActionMode.finish();
 				break;
 			/* 剪切 */
 			case R.id.action_move:
 				toCut();
-				Toast.makeText(FolderAct.this, "cut ok!", Toast.LENGTH_SHORT)
-						.show();
+
+				if (!Messages.fileToCopy.isEmpty()) {
+					Toast.makeText(FolderAct.this, "cut ok!",
+							Toast.LENGTH_SHORT).show();
+				}
+
+				getItemNoml();
 				mActionMode.finish();
 				break;
 
@@ -419,29 +636,17 @@ public class FolderAct extends Activity {
 		private void toCut() {
 			// TODO Auto-generated method stub
 			for (ItemMessages f : mFastLists) {
-				Messages.fileToCopy.push(f);
+				if (f.getAbusPath().isDirectory()) {
+					Toast.makeText(FolderAct.this, "文件夹不可剪切", 0).show();
+					continue;
+				}
+				if (-1 == Messages.fileToCopy.search(f)) {
+					Messages.fileToCopy.push(f);
+				}
+
+				
 			}
 			getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);// 更新menu显示
-		}
-
-		/*
-		 * 新建
-		 */
-		private void addNewItem() {
-			// TODO Auto-generated method stub
-			AlertDialog.Builder builder = new Builder(FolderAct.this);
-
-			builder.setNegativeButton("取消",
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							while (!Messages.fileToCopy.isEmpty()) {
-								Messages.fileToCopy.pop();
-							}
-						}
-					});
 		}
 
 		/*
@@ -453,9 +658,7 @@ public class FolderAct extends Activity {
 				File f = mFastLists.get(i).getAbusPath();
 				if (f.exists()) {
 					f.delete();
-					// if(){
-					//
-					// }
+					Toast.makeText(FolderAct.this, "删除成功", 0).show();
 				}
 			}
 
@@ -463,10 +666,13 @@ public class FolderAct extends Activity {
 
 		private void addAllFastViews() {
 			// TODO Auto-generated method stub
-			// Log.d("123", "4");
-			// Log.d("123", mFastLists.size() + "");
+
 			for (ItemMessages i : mFastLists) {
-				Log.d("123", "456789");
+
+				if (!i.getAbusPath().isDirectory()) {
+					Toast.makeText(FolderAct.this, "只有文件夹才能创建快捷方式哦~", 0).show();
+					continue;
+				}
 				mEditor.putString(i.getName(), i.getAbusPath().toString());
 			}
 			mEditor.commit();
@@ -474,15 +680,28 @@ public class FolderAct extends Activity {
 
 		private void getItemNoml() {
 			// TODO Auto-generated method stub
+			Log.d("123", "getItemNomal");
+			ArrayList<ItemMessages> arrayList = new ArrayList<ItemMessages>();
 
 			Iterator<ItemMessages> m = mFastLists.iterator();
 
 			if (m != null) {
+				// Log.d("123", "m!=null");
 				while (m.hasNext()) {
+					// Log.d("123", "m.hasNext");
 					ItemMessages item = m.next();
-					item.setSelected();
+
+					if (!arrayList.contains(item)) {
+						arrayList.add(item);
+						item.setSelected();
+					} else {
+						continue;
+					}
+
 					if (mListView.getChildAt(item.getPosion()) != null) {
+						Log.d("123", "setBackground");
 						mListView.getChildAt(item.getPosion())
+
 						// .setBackgroundResource(
 						// R.drawable.selected_background);
 								.setBackgroundColor(0xFFCAFFFF);
@@ -492,7 +711,6 @@ public class FolderAct extends Activity {
 
 			mAdapter.setFlag(false);
 			mFastLists.clear();
-
 			numb = mFastLists.size();
 		}
 
@@ -504,4 +722,5 @@ public class FolderAct extends Activity {
 		}
 
 	}
+
 }

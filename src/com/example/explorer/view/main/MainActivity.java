@@ -12,11 +12,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,14 +30,8 @@ import android.widget.CheckBox;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.example.explorer.R;
-import com.example.explorer.R.drawable;
-import com.example.explorer.R.id;
-import com.example.explorer.R.layout;
-import com.example.explorer.R.menu;
 import com.example.explorer.data.Messages;
 import com.example.explorer.view.folder.FolderAct;
 import com.example.explorer.view.main.MyWeight.ClickInListener;
@@ -89,11 +83,11 @@ public class MainActivity extends Activity {
 		// int o=getWindowManager().getDefaultDisplay().getHeight();
 		// int l=getWindowManager().getDefaultDisplay().getWidth();
 
-//		Point p = new Point();
-//		getWindowManager().getDefaultDisplay().getSize(p);
-//		int o = p.x;
-//		int l = p.y;
-//		Log.d("123", "h=" + o + "  w=" + l);
+		// Point p = new Point();
+		// getWindowManager().getDefaultDisplay().getSize(p);
+		// int o = p.x;
+		// int l = p.y;
+		// Log.d("123", "h=" + o + "  w=" + l);
 	}
 
 	@Override
@@ -102,10 +96,10 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		MenuItem item = menu.getItem(0);
 		MenuItem item2 = menu.getItem(1);
-	
+
 		item.setVisible(false);
 		item2.setVisible(false);
-	
+
 		return true;
 	}
 
@@ -325,7 +319,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				mGridLayout.removeView(v);
 				if (fastList.contains(v)) {
-					Log.d("123", "qwertyyiuy");
+					// Log.d("123", "qwertyyiuy");
 					fastList.remove(v);
 				}
 			}
@@ -342,7 +336,9 @@ public class MainActivity extends Activity {
 					mToast.show();
 
 				} else {
-
+					frountDown.setFlagClick();
+					frountPic.setFlagClick();
+					frountSd.setFlagClick();
 					int i = mGridLayout.getChildCount();
 					for (int j = 3; j < i; j++) {
 						MyWeight myWeight = (MyWeight) mGridLayout
@@ -374,6 +370,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (((MyWeight) v).getFlagClick()) {
 					changeAct(((MyWeight) v).getAbsPath());
+					Messages.clickIn = new File(((MyWeight) v).getAbsPath());
 				}
 			}
 		};
@@ -432,13 +429,18 @@ public class MainActivity extends Activity {
 
 			int count = mGridLayout.getChildCount();
 
-			flag = ((MyWeight) mGridLayout.getChildAt(0)).getFlag();
+			flag = ((MyWeight) mGridLayout.getChildAt(count - 1)).getFlag();
 
 			if (!flag) {
+
+//				frountDown.setFlagClick();
+//				frountPic.setFlagClick();
+//				frountSd.setFlagClick();
 				for (int i = 0; i < count; i++) {
 					MyWeight v = (MyWeight) mGridLayout.getChildAt(i);
 					v.setDelShow(flag);
 					v.clearAnimation();
+					v.stopAnim();
 					if (flag == true) {
 						flag = !flag;
 					}
@@ -451,6 +453,30 @@ public class MainActivity extends Activity {
 					mEditor.putString(w.getName(), w.getAbsPath());
 				}
 				mEditor.commit();
+				AlertDialog.Builder builder = new Builder(this);
+				builder.setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								finish();
+							}
+
+						});
+
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				builder.setTitle("确定退出?");
+				builder.show();
 			}
 
 		}

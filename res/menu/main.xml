@@ -10,5 +10,4 @@
         android:icon="@drawable/abs__ic_clear_search_api_holo_light"
         android:showAsAction="always"
         android:title="取消"/>
-
 </menu>

@@ -2,7 +2,9 @@ package com.example.explorer.view.folder;
 
 import java.util.ArrayList;
 import com.example.explorer.R;
+import com.example.explorer.data.FileInfo;
 import com.example.explorer.data.ItemMessages;
+import com.example.explorer.util.FileIconHelper;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -122,8 +124,12 @@ public class MyAdapter extends BaseAdapter {
 			convertView.setTag(hodle);
 		}
 
+		ItemMessages messages = mArrayList.get(position);
 		MyHodle hodle = (MyHodle) convertView.getTag();
-
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.canRead = messages.getAbusPath().canRead();
+		fileInfo.canWrite = messages.getAbusPath().canWrite();
+		fileInfo.filePath = messages.getAbusPath().toString();
 		if (!mArrayList.get(position).getSelected()) {
 			Log.d("123", "notSelected");
 			// convertView.setBackgroundResource(R.drawable.normal_item);
@@ -137,14 +143,16 @@ public class MyAdapter extends BaseAdapter {
 		hodle.TextName.setText(mArrayList.get(position).getName());
 		hodle.TextNumb.setText(mArrayList.get(position).getSubMub());
 		hodle.TextTime.setText(mArrayList.get(position).getData());
-		/*设置Item图标*/
+		/* 设置Item图标 */
 		if (!mArrayList.get(position).getStyle()) {
-			hodle.ImageView.setImageResource(R.drawable.wenjian);
+			FileIconHelper.instance(mContext).setIcon(fileInfo,
+					hodle.ImageView, hodle.ImageView);
+			// hodle.ImageView.setImageResource(R.drawable.wenjian);
 		} else {
 			hodle.ImageView.setImageResource(R.drawable.folder);
 		}
-//		FileIconHelper.instance(mContext).setIcon(fileInfo, lFileImage,
-//				lFileImageFrame);
+		// FileIconHelper.instance(mContext).setIcon(fileInfo, lFileImage,
+		// lFileImageFrame);
 		return convertView;
 
 	}

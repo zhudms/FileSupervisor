@@ -40,11 +40,11 @@ import android.widget.Toast;
 
 /**
  * 
-* @ClassName: MyWeight 
-* @Description: 单元类,文件夹快捷方式
-* @author T
-* @date 2013-11-8 下午9:23:03 
-*
+ * @ClassName: MyWeight
+ * @Description: 单元类,文件夹快捷方式
+ * @author T
+ * @date 2013-11-8 下午9:23:03
+ * 
  */
 public class MyWeight extends LinearLayout {
 
@@ -52,11 +52,11 @@ public class MyWeight extends LinearLayout {
 	private ImageView mImageViewDel;
 	private TextView mTextView;
 	private Animation mAnimation;
-	private boolean flag = true;
+	private boolean flag = true;// 是否显示删除符号
 	private RelativeLayout mRelativeLayout;
 	private Context context;
 	private File mFile;
-	private boolean flagClick = false;
+	private boolean flagClick = false;// 是否能点击?
 
 	public interface OnlangClickLisener {
 		void LangClick(View v, Boolean flag);
@@ -168,11 +168,12 @@ public class MyWeight extends LinearLayout {
 	}
 
 	private void startAnimation() {
-		mRelativeLayout.startAnimation(mAnimation);// 控制哪部分呢在晃
+		// flagClick = !flagClick;
+		mRelativeLayout.startAnimation(mAnimation);// 控制哪部分在晃
 	}
 
 	public void stopAnim() {
-		flagClick = !flagClick;
+		// flagClick = !flagClick;
 		mRelativeLayout.clearAnimation();
 	}
 
@@ -231,6 +232,11 @@ public class MyWeight extends LinearLayout {
 	public boolean getFlagClick() {
 		// TODO Auto-generated method stub
 		return this.flagClick;
+	}
+
+	public void setFlagClick() {
+		// TODO Auto-generated method stub
+		this.flagClick = !flagClick;
 	}
 
 	public boolean getStyle() {

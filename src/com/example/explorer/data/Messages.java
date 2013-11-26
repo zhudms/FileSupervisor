@@ -28,6 +28,7 @@ public class Messages {
 	public static String Hidden = "H";
 	public static Stack<ItemMessages> fileToCopy = new Stack<ItemMessages>();
 	public static Stack<File> fileFlow = new Stack<File>();
+	public static File clickIn = null;
 
 	public Messages() {
 
